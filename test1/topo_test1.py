@@ -12,14 +12,14 @@ File name: flowvisor_test1.py
 			    S1 ----------- S2 ----- H3
             /
            /
-			H2
+         H2
 			
 For running type:
 sudo mn --custom topo_test1.py --topo topo_test1 --link tc --controller remote --mac --arp
 			
 '''
 
-class topoTest1()(Topo):
+class topoTest1(Topo):
 	def __init__(self):
 	
 		# Initialize topology
