@@ -10,16 +10,16 @@ File name: flowvisor_test1.py
 			  \
 			   \
 			    S1 ----------- S2 ----- H3
-			   /
+            /
            /
 			H2
 			
 For running type:
-sudo mn --custom flowvisor_test1.py --topo fvtopo1 --link tc --controller remote --mac --arp
+sudo mn --custom topo_test1.py --topo topo_test1 --link tc --controller remote --mac --arp
 			
 '''
 
-class FVTopo1(Topo):
+class topoTest1()(Topo):
 	def __init__(self):
 	
 		# Initialize topology
@@ -47,5 +47,5 @@ class FVTopo1(Topo):
 		self.addLink('h2', 's1', **link_config)
 		self.addLink('h3', 's2', **link_config)	
 
-topos = { 'fvtopo1': ( lambda: FVTopo1() ) }
+topos = { 'topo_test1': ( lambda: topoTest1() ) }
 
