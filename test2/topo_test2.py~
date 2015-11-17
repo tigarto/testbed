@@ -4,7 +4,7 @@ from mininet.topo import Topo
 
 '''
 
-File name: flowvisor_test2.py
+File name: flowvisor_test1.py
 
          H1
            \

@@ -6,10 +6,10 @@ from mininet.topo import Topo
 
 File name: flowvisor_test1.py
 
-			H1
-			  \
-			   \
-			    S1 ----------- S2 ----- H3
+         H1
+           \
+            \
+             S1 ----------- S2 ----- H3
             /
            /
          H2

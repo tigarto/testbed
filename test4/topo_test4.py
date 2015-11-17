@@ -4,7 +4,7 @@ from mininet.topo import Topo
 
 '''
 
-File name: flowvisor_test2.py
+File name: flowvisor_test4.py
 
          H1
            \
@@ -15,11 +15,11 @@ File name: flowvisor_test2.py
          H2
 			
 For running type:
-sudo mn --custom topo_test2.py --topo topo_test2 --link tc --controller remote --mac --arp
+sudo mn --custom topo_test4.py --topo topo_test4 --link tc --controller remote --mac --arp
 			
 '''
 
-class topoTest2(Topo):
+class topoTest4(Topo):
 	def __init__(self):
 	
 		# Initialize topology
@@ -47,5 +47,5 @@ class topoTest2(Topo):
 		self.addLink('h2', 's1', **link_config)
 		self.addLink('h3', 's2', **link_config)	
 
-topos = { 'topo_test2': ( lambda: topoTest2() ) }
+topos = { 'topo_test4': ( lambda: topoTest4() ) }
 
