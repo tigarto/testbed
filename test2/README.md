@@ -1,6 +1,6 @@
-# Test 1
+# Test 2
 
-## Red sustrato:  
+## Red sustrato (La misma empleada en el test 1):  
 Esta topología sencilla conecta tres equipos por medio de dos switch. El ancho de banda de los enlaces será de 100 Mbps. El objetivo a medida que se avance es ir virtualizando transitoriamente.
 
 ```
