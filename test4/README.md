@@ -1,4 +1,4 @@
-# Test 3:
+# Test 4:
 
 ## Objetivos:
 1. Crear slices usando comandos basicos de flowVisor sobre la red sustrato mostrada.
@@ -80,7 +80,6 @@ La siguiente tabla define los match de los flowspaces de la slice VN1:
 ```
 fvctl -f /dev/null update-slice --disable-slice VN2
 fvctl -f /dev/null list-slices
-
 ```
 
 2. Solo VN2 habilitada
@@ -183,16 +182,18 @@ pingall
 xterm h1 h2 h3
 
 # Consola 2 (Controlador POX)
+./pox.py openflow.of_01 --port=10001 forwarding.hub
+
+# Consola 3 (Controlador POX)
 ./pox.py openflow.of_01 --port=10002 forwarding.hub
 
-# Consola 3 (h3)
+# Consola 4 (h3)
 iperf -s 4000 &
 iperf -s 5000 &
 
-# Consola 4 (h1)
+# Consola 5 (h1)
 iperf -c 10.0.0.3 -p 4000
 
-# Consola 5 (h2)
+# Consola 6 (h2)
 iperf -c 10.0.0.3 -p 5000
-
 ```
