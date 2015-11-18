@@ -1,5 +1,9 @@
 # Test 2:
 
+## Objetivos:
+1. Crear slices usando comandos basicos de flowVisor sobre la red sustrato mostrada.
+2. Mirar el efecto de una slice sobre el trafico de la red (en terminos de conectividad y ancho de banda).
+
 ## Red sustrato (La misma del test 1):  
 Esta topología sencilla conecta tres equipos por medio de dos switch. El ancho de banda de los enlaces será de 100 Mbps. El objetivo a medida que se avance es ir virtualizando transitoriamente.
 
@@ -14,14 +18,50 @@ Esta topología sencilla conecta tres equipos por medio de dos switch. El ancho 
 ```
 
 ## Controlador: 
-No se manejan colas. Lo unico que se hace es programar los flujos para que permitan viajar
-los datos entre todos los nodos de esta pequeña red
-Archivo: pox_test1.py
+El modulo ejecutado es hub.py el cual hace que el controlador funciones como hub.
+Archivo: hub.py
+
+```
+./pox.py openflow.of_01 --port=10001 forwarding.hub
+```
 
 ## Redes Virtuales: 
-No hay 
+
+### Slice 1 (VN1)
+
+```
+         H1
+           \
+            \
+             S1 ----------- S2 ----- H3
+         
+```
+
+La siguiente tabla define los match para los flujos de la slice VN1
+
+|DPID        |Priority    |in_port     |dl_vlan     |dl_src      |dl_dst      |dl_type     |nw_src      |nw_dst      |nw_proto    |nw_tos      |tp_src      |tp_dst       |
+|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+|1|1|2|***|***|***|***|***|***|***|***|***|***|
+|1|1|1|***|***|***|***|***|***|***|***|***|***|
+|2|1|any|***|***|***|***|***|***|***|***|***|***|
 
 ## Pruebas realizadas:
+
+### Flowvisor (fvctl)
+Comandos ejecutados con el flowvisor
+```
+# Creando las slices
+sudo /etc/init.d/flowvisor start
+sh fv_test2.sh
+
+# Verificando las caracteristicas de las slices (Comandos flowvisor aplicados)
+fvctl -f /dev/null list-slices
+fvctl -f /dev/null list-slice-info VN1
+fvctl -f /dev/null list-datapath-info 1
+fvctl -f /dev/null list-datapath-info 2
+fvctl -f /dev/null list-flowspace -s VN1
+```
+
 ### pingall
 Para verificar conectividad entre todos los nodos de la red
 
@@ -62,7 +102,7 @@ pingall
 xterm h1 h2 h3
 
 # Consola 2 (Controlador POX)
-./pox.py pox_test1
+./pox.py openflow.of_01 --port=10001 forwarding.hub
 
 # Consola 3 (h3)
 iperf -s 4000 &
