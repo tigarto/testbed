@@ -1,6 +1,11 @@
-# Test 1
+# Test 1:
 
-## Red sustrato:  
+## Objetivos:
+1. Implementar una topologia sencilla en mininet.
+2. Crear un modulo para el controladot que permitan la comunicacion entre los diferentes nodos de la red sencilla.
+3. Hacer pruebas de conectividad sencilla y analisis de ancho de banda entre los hosts.
+
+## Red sustrato (La misma del test 1):  
 Esta topología sencilla conecta tres equipos por medio de dos switch. El ancho de banda de los enlaces será de 100 Mbps. El objetivo a medida que se avance es ir virtualizando transitoriamente.
 
 ```
@@ -13,8 +18,15 @@ Esta topología sencilla conecta tres equipos por medio de dos switch. El ancho 
          H2
 ```
 
+## Controlador: 
+No se manejan colas. Lo unico que se hace es programar los flujos para que permitan viajar
+los datos entre todos los nodos de esta pequeña red. El archivo asociado al controlador 
+se debera guardar en la carpeta ext dentro de pox.
+
+Archivo: pox_test1.py
+
 ## Redes Virtuales: 
-No hay
+No hay 
 
 ## Pruebas realizadas:
 ### pingall
@@ -45,6 +57,28 @@ iperf -s -p 5000 &
 iperf -c 10.0.0.3 -p 4000
 
 # En h2
+iperf -c 10.0.0.3 -p 5000
+
+```
+
+## Run log (comandos ejecutados):
+```
+# Consola 1 (mininet)
+sudo mn --custom topo_test2.py --topo topo_test2 --link tc --controller remote --mac --arp
+pingall
+xterm h1 h2 h3
+
+# Consola 2 (Controlador POX)
+./pox.py pox_test1
+
+# Consola 3 (h3)
+iperf -s 4000 &
+iperf -s 5000 &
+
+# Consola 4 (h1)
+iperf -c 10.0.0.3 -p 4000
+
+# Consola 5 (h2)
 iperf -c 10.0.0.3 -p 5000
 
 ```
