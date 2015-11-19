@@ -1,0 +1,89 @@
+from pox.core import core
+import pox.openflow.libopenflow_01 as of
+from pox.lib.util import dpidToStr
+import pox.lib.packet as pkt
+
+log = core.getLogger()
+
+s1_dpid=0
+s2_dpid=0
+
+def parse_icmp (eth_packet):
+  if eth_packet.type == pkt.IP_TYPE:
+    ip_packet = eth_packet.payload
+    if ip_packet.protocol == pkt.ICMP_PROTOCOL:
+      icmp_packet = ip_packet.payload
+      
+def handle_ethernet_packet (packet):
+  eth_pkt = packet.find('ethernet')
+  print "eth_src" + str(eth_pkt.src)
+  print "eth_dst" + str(eth_pkt.dst)
+  
+
+def _handle_ConnectionUp(event):
+	global s1_dpid, s2_dpid
+	print "ConnectionUp: ", dpidToStr(event.connection.dpid)
+
+	#remember the connection dpid for switch 
+	for m in event.connection.features.ports:
+		if m.name == "s1-eth1":
+			s1_dpid = event.connection.dpid
+			print "s1_dpid = ", s1_dpid
+		elif m.name == "s2-eth1":
+			s2_dpid = event.connection.dpid
+			print "s2_dpid = ", s2_dpid
+
+
+def _handle_PacketIn(event):
+	global s1_dpid, s2_dpid
+	print "PacketIn: ", dpidToStr(event.connection.dpid)
+	pkt = event.data
+	handle_ethernet_packet(pkt)
+	# s1
+	if event.connection.dpid==s1_dpid:
+		# F1 (dl_src = 00:00:00:00:00:01 ---> port = 1)
+		msg = of.ofp_flow_mod()
+		msg.priority = 1
+		msg.idle_timeout = 0
+		msg.hard_timeout = 0
+		msg.match.in_port = 1		
+		msg.actions.append(of.ofp_action_output(port = of.OFPP_FLOOD))
+		event.connection.send(msg)
+		
+		msg = of.ofp_flow_mod()
+		msg.priority = 1
+		msg.idle_timeout = 0
+		msg.hard_timeout = 0
+		msg.match.in_port = 2		
+		msg.actions.append(of.ofp_action_output(port = 1))
+		event.connection.send(msg)
+		
+		msg = of.ofp_flow_mod()
+		msg.priority = 1
+		msg.idle_timeout = 0
+		msg.hard_timeout = 0
+		msg.match.in_port = 3		
+		msg.actions.append(of.ofp_action_output(port = 1))
+		event.connection.send(msg)
+
+	if event.connection.dpid==s2_dpid:	
+		
+		msg = of.ofp_flow_mod()
+		msg.priority = 1
+		msg.idle_timeout = 0
+		msg.hard_timeout = 0
+		msg.match.in_port = 1		
+		msg.actions.append(of.ofp_action_output(port = 2))
+		event.connection.send(msg)
+		
+		msg = of.ofp_flow_mod()
+		msg.priority = 1
+		msg.idle_timeout = 0
+		msg.hard_timeout = 0
+		msg.match.in_port = 2		
+		msg.actions.append(of.ofp_action_output(port = 1))
+		event.connection.send(msg)
+		
+def launch ():
+	core.openflow.addListenerByName("ConnectionUp", _handle_ConnectionUp)
+	core.openflow.addListenerByName("PacketIn", _handle_PacketIn) 
