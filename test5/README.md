@@ -1,8 +1,8 @@
-# Test 3:
+# Test 5:
 
 ## Objetivos:
-1. Crear slices usando comandos basicos de flowVisor sobre la red sustrato mostrada.
-2. Mirar de dos slices coexistentes cuando estas comparten recursos como los puertos.
+1. Crear slices usando comandos basicos de flowVisor sobre la red sustrato mostrada pero manejando otros campos Match.
+2. Mirar de dos slices coexistentes.
 3. Verificar el efecto de las prioridades.
 
 ## Red sustrato (La misma del test 1):  
@@ -47,9 +47,10 @@ La siguiente tabla define los match de los flowspaces de la slice VN1:
 
 |DPID        |Priority    |in_port     |dl_vlan     |dl_src      |dl_dst      |dl_type     |nw_src      |nw_dst      |nw_proto    |nw_tos      |tp_src      |tp_dst       |
 |:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-|1|1|2|***|***|***|***|***|***|***|***|***|***|
-|1|1|1|***|***|***|***|***|***|***|***|***|***|
-|2|1|any|***|***|***|***|***|***|***|***|***|***|
+|1|1|***|***|00:00:00:00:00:01|00:00:00:00:00:03|***|***|***|***|***|***|***|
+|1|1|***|***|00:00:00:00:00:03|00:00:00:00:00:01|***|***|***|***|***|***|***|
+|2|1|***|***|00:00:00:00:00:01|00:00:00:00:00:03|***|***|***|***|***|***|***|
+|2|1|***|***|00:00:00:00:00:03|00:00:00:00:00:01|***|***|***|***|***|***|***|
 
 ### Slice 2 (VN2)
 
@@ -63,13 +64,14 @@ La siguiente tabla define los match de los flowspaces de la slice VN1:
          
 ```
 
-La siguiente tabla define los match de los flowspaces de la slice VN1:
+La siguiente tabla define los match de los flowspaces de la slice VN2:
 
 |DPID        |Priority    |in_port     |dl_vlan     |dl_src      |dl_dst      |dl_type     |nw_src      |nw_dst      |nw_proto    |nw_tos      |tp_src      |tp_dst       |
 |:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-|1|1|3|***|***|***|***|***|***|***|***|***|***|
-|1|1|1|***|***|***|***|***|***|***|***|***|***|
-|2|1|any|***|***|***|***|***|***|***|***|***|***|
+|1|1|***|***|00:00:00:00:00:02|00:00:00:00:00:03|***|***|***|***|***|***|***|
+|1|1|***|***|00:00:00:00:00:03|00:00:00:00:00:02|***|***|***|***|***|***|***|
+|2|1|***|***|00:00:00:00:00:02|00:00:00:00:00:03|***|***|***|***|***|***|***|
+|2|1|***|***|00:00:00:00:00:03|00:00:00:00:00:02|***|***|***|***|***|***|***|
 
 ## Pruebas realizadas:
 
@@ -82,46 +84,6 @@ fvctl -f /dev/null update-slice --disable-slice VN2
 fvctl -f /dev/null list-slices
 
 ```
-
-2. Solo VN2 habilitada
-
-Teniendo en cuenta el estado anterior de las slices se habilita VN2 y se deshabilita VN1
-
-```
-fvctl -f /dev/null update-slice --enable-slice VN2
-fvctl -f /dev/null update-slice --disable-slice VN1
-fvctl -f /dev/null list-slices
-```
-
-3. Ambas slices habilitadas
-
-Se habilita VN1 pues VN2 ya se encuentra habilitada desde caso anterior
-
-```
-fvctl -f /dev/null update-slice --enable-slice VN1
-fvctl -f /dev/null list-slices
-```
-
-4. Cambio de la prioridad de los flowspaces de la slice VN2
-La prioridad de los slices de ambas slices es la misma (1) por lo que se procedera a cambiar la a cambiar los flowspaces para la slice VN2 por una prioridad mas alta.
-La tabla de Flowspaces quedara asi:
-
-Para la slice VN1:
-
-|DPID        |Priority    |in_port     |dl_vlan     |dl_src      |dl_dst      |dl_type     |nw_src      |nw_dst      |nw_proto    |nw_tos      |tp_src      |tp_dst       |
-|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-|1|1|2|***|***|***|***|***|***|***|***|***|***|
-|1|1|1|***|***|***|***|***|***|***|***|***|***|
-|2|1|any|***|***|***|***|***|***|***|***|***|***|
-
-Para la slice VN2:
-
-|DPID        |Priority    |in_port     |dl_vlan     |dl_src      |dl_dst      |dl_type     |nw_src      |nw_dst      |nw_proto    |nw_tos      |tp_src      |tp_dst       |
-|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-|1|10|3|***|***|***|***|***|***|***|***|***|***|
-|1|10|1|***|***|***|***|***|***|***|***|***|***|
-|2|10|any|***|***|***|***|***|***|***|***|***|***|
-
 
 ### Flowvisor (fvctl)
 Comandos ejecutados con el flowvisor
