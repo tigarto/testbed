@@ -40,18 +40,18 @@ En la topologia los nodos toman tienen las siguientes caracteristicas:
 El modulo ejecutado es l2_learning.py que hace que el controlados funcione como un switch capa 2.
 Archivo: l2_learning.py
 
-Para la slice VN1:
+Para la slice HTTP:
 ```
 ./pox.py openflow.of_01 --port=10001 forwarding.l2_learning samples.pretty_log log.level --DEBUG
 ```
 
-Para la slice VN2:
+Para la slice FTP:
 ```
 ./pox.py openflow.of_01 --port=10002 forwarding.l2_learning samples.pretty_log log.level --DEBUG
 ```
 ## Redes Virtuales: 
 
-### Slice 1 (VN1)
+### Slice 1 (HTTP)
 
 ```
              H1
@@ -78,7 +78,7 @@ La siguiente tabla define los match de los flowspaces de la slice VN1:
 |2|100|3|***|00:00:00:00:00:06|***|***|***|***|***|***|***|8000|
 |2|100|1|***|00:00:00:00:00:06|***|***|***|***|***|***|***|***|
 
-### Slice 2 (VN2)
+### Slice 2 (FTP)
 
 ```
     
@@ -106,10 +106,8 @@ La siguiente tabla define los match de los flowspaces de la slice VN2:
 
 ### Habilitando solo una slice:
 
-
-
-
 ## Run log (comandos ejecutados):
+
 ```
 # Consola 1 (mininet)
 sudo mn --custom topo_test4.py --topo topo_test4 --link tc --controller remote --mac --arp
