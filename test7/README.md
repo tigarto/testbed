@@ -104,8 +104,6 @@ La siguiente tabla define los match de los flowspaces de la slice VN2:
 
 ## Pruebas realizadas:
 
-### Habilitando solo una slice:
-
 ## Run log (comandos ejecutados):
 
 ```
