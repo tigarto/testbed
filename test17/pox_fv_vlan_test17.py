@@ -34,14 +34,14 @@ def _handle_PacketIn(event):
 		flow_s1_0.priority = 32768 # A mayor valor mas prioridad
 		flow_s1_0.match.in_port = 1
 		flow_s1_0vlan_id = of.ofp_action_vlan_vid(vlan_vid = 10)
-		flow_s1_queue1 = of.ofp_action_enqueue(port = 3, queue_id = 1))
+		flow_s1_queue1 = of.ofp_action_enqueue(port = 3, queue_id = 1)
 		flow_s1_0.actions = [flow_s1_0vlan_id,flow_s1_queue1]
 		
 		flow_s1_1 = of.ofp_flow_mod()
 		flow_s1_1.priority = 32768 # A mayor valor mas prioridad
 		flow_s1_1.match.in_port = 2
 		flow_s1_1vlan_id = of.ofp_action_vlan_vid(vlan_vid = 20)
-		flow_s1_queue2 = of.ofp_action_enqueue(port = 3, queue_id = 2))
+		flow_s1_queue2 = of.ofp_action_enqueue(port = 3, queue_id = 2)
 		flow_s1_1.actions = [flow_s1_1vlan_id,flow_s1_queue2]
 
 
@@ -73,14 +73,14 @@ def _handle_PacketIn(event):
 		flow_s2_0.priority = 32768 # A mayor valor mas prioridad
 		flow_s2_0.match.in_port = 2
 		flow_s2_0vlan_id = of.ofp_action_vlan_vid(vlan_vid = 20)
-		flow_s2_queue2 = of.ofp_action_enqueue(port = 1, queue_id = 2))
+		flow_s2_queue2 = of.ofp_action_enqueue(port = 1, queue_id = 2)
 		flow_s2_0.actions = [flow_s2_0vlan_id,flow_s2_queue2]
 		
 		flow_s2_1 = of.ofp_flow_mod()
 		flow_s2_1.priority = 32768 # A mayor valor mas prioridad
 		flow_s2_1.match.in_port = 3
 		flow_s2_1vlan_id = of.ofp_action_vlan_vid(vlan_vid = 10)
-		flow_s2_queue1 = of.ofp_action_enqueue(port = 1, queue_id = 1))
+		flow_s2_queue1 = of.ofp_action_enqueue(port = 1, queue_id = 1)
 		flow_s2_1.actions = [flow_s2_1vlan_id,flow_s2_queue1]
 
 	   	flow_s2_2 = of.ofp_flow_mod()
